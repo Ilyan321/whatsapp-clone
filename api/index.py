@@ -98,7 +98,7 @@ async def handle_whatsapp_message(request: Request):
                                 "Content-Type": "application/json"
                             }
                             mistral_payload = {
-                                "model": "open-mistral-7b",
+                                "model": "mistral-small-latest",
                                 "messages": [
                                     {"role": "system", "content": SYSTEM_PROMPT},
                                     {"role": "user", "content": user_text}
