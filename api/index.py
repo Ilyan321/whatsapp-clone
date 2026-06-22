@@ -1,15 +1,16 @@
 import os
-import time
+import asyncio
 import requests
 from fastapi import FastAPI, Request, Response
 from dotenv import load_dotenv
 
+# Load local environment configurations if active
 load_dotenv()
 
 app = FastAPI()
 
-# Secure environment variable injections from Vercel Console
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+# Secure cloud variable mapping structures
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 META_ACCESS_TOKEN = os.getenv("META_ACCESS_TOKEN")
 WHATSAPP_PHONE_NUMBER_ID = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
 VERIFY_TOKEN = os.getenv("WEBHOOK_VERIFY_TOKEN")
@@ -55,7 +56,7 @@ User: Mery sy ye ai waly board ma typing nah ho rhi... Bar bar change kr k Gboar
 Response: bro ye dimaag kharab kar raha parhne me     me na parh paya bro baqi 10 minute bache......bus pe jana kab hy??
 """
 
-# 1. Meta Webhook Security Handshake (GET Protocol)
+# 1. Meta Webhook Handshake Protocol Verification Node (GET Handler)
 @app.get("/webhook")
 async def verify_webhook(request: Request):
     params = request.query_params
@@ -63,70 +64,61 @@ async def verify_webhook(request: Request):
         return Response(content=params.get("hub.challenge"), media_type="text/plain")
     return Response(status_code=403)
 
-# 2. Asynchronous Meta Message Payloads Interceptor (POST Protocol)
+# 2. Live Dynamic Meta Webhook Core Pipeline Interceptor (POST Handler)
 @app.post("/webhook")
 async def handle_whatsapp_message(request: Request):
     try:
         data = await request.json()
         
-        # FIXED: Dynamic entry list inspection loop bypassing raw list hardcoding
-        if not data or "entry" not in data or not data["entry"]:
-            return {"status": "empty_entry"}
-            
+        # Completely dynamic looping blocks; zero hardcoded array indices
         for entry in data.get("entry", []):
-            if "changes" not in entry or not entry["changes"]:
-                continue
-                
             for change in entry.get("changes", []):
                 change_value = change.get("value", {})
                 
-                # Dynamic iteration through batch messages arrays
                 if "messages" in change_value and change_value["messages"]:
                     for message_object in change_value.get("messages", []):
                         user_phone = message_object.get("from")
                         
-                        # Verify message type payload context
                         if message_object.get("type") == "text" and user_phone:
                             user_text = message_object.get("text", {}).get("body")
                             if not user_text:
                                 continue
 
-                            # FIXED: Real API Gateway for Mistral Cloud Platform
-                            mistral_url = "https://mistral.ai"
-                            mistral_headers = {
-                                "Authorization": f"Bearer {MISTRAL_API_KEY}",
+                            # CRITICAL: Official High-Speed Groq Cloud API Configuration Layout
+                            groq_url = "https://api.groq.com/openai/v1/chat/completions"
+                            groq_headers = {
+                                "Authorization": f"Bearer {GROQ_API_KEY}",
                                 "Content-Type": "application/json"
                             }
-                            mistral_payload = {
-                                "model": "mistral-small-latest",
+                            groq_payload = {
+                                "model": "llama-3.1-8b-instant",
                                 "messages": [
                                     {"role": "system", "content": SYSTEM_PROMPT},
                                     {"role": "user", "content": user_text}
                                 ]
                             }
                             
-                            response = requests.post(mistral_url, json=mistral_payload, headers=mistral_headers, timeout=8)
+                            response = requests.post(groq_url, json=groq_payload, headers=groq_headers, timeout=8)
                             response.raise_for_status()
                             response_data = response.json()
                             
-                            # FIXED: Valid structural choice key extraction mapping
+                            # Compliant array traversal mapping structure
                             clone_reply = response_data["choices"][0]["message"]["content"]
 
-                            # Native serverless safe sleep throttling metric
+                            # Safe serverless throttling simulation window using asyncio
                             typing_delay = min(len(clone_reply) * 0.04, 3.5)
-                            time.sleep(typing_delay)
+                            await asyncio.sleep(typing_delay)
 
                             send_whatsapp_message(user_phone, clone_reply)
                             
     except Exception as e:
-        # Prevents internal errors from breaking the function pipeline
-        print(f"Exception trapped and handled gracefully: {e}")
+        print(f"Exception securely managed inside cloud memory execution boundaries: {e}")
         
     return {"status": "success"}
 
 def send_whatsapp_message(to_phone: str, text: str):
-    # FIXED: Fully compliant Meta Graph URI scheme structure 
-    url = f"https://facebook.com{WHATSAPP_PHONE_NUMBER_ID}/messages"
+    # Fixed official Meta Graph API URL routing
+    url = f"https://graph.facebook.com/v19.0/{WHATSAPP_PHONE_NUMBER_ID}/messages"
     headers = {
         "Authorization": f"Bearer {META_ACCESS_TOKEN}",
         "Content-Type": "application/json"
@@ -139,6 +131,7 @@ def send_whatsapp_message(to_phone: str, text: str):
     }
     try:
         res = requests.post(url, json=payload, headers=headers, timeout=5)
-        print(f"Meta Graph Server Transmission Return Status: {res.status_code}")
+        print(f"Meta Output Response Registry Code: {res.status_code}")
+        print(f"Meta Output Body: {res.text}") # Added this so you can see if Meta complains about the format
     except Exception as send_err:
-        print(f"Failed to push message envelope context: {send_err}")
+        print(f"Failed to execute message envelope push: {send_err}")
