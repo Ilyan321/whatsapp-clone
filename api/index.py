@@ -5,12 +5,13 @@ from fastapi import FastAPI, Request, Response
 from dotenv import load_dotenv
 
 # Load local environment configurations if active
-load_dotenv()
+load_dotenv(override=True)
 
 app = FastAPI()
 
 # Secure cloud variable mapping structures
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+print(f"DEBUG: My Groq Key starts with -> {str(GROQ_API_KEY)[:8]}")
 META_ACCESS_TOKEN = os.getenv("META_ACCESS_TOKEN")
 WHATSAPP_PHONE_NUMBER_ID = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
 VERIFY_TOKEN = os.getenv("WEBHOOK_VERIFY_TOKEN")
